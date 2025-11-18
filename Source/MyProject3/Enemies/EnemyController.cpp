@@ -5,19 +5,74 @@
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
 #include "MyProject3/Enemies/EnemyBase.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Perception/AISense_Sight.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 AEnemyController::AEnemyController()
 {
+	BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorTreeComponent"));
+	BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 
+	//setup perception
+	EnemyPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("EnemyPerceptionComponent"));
+	sightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+	EnemyPerceptionComponent->ConfigureSense(*sightConfig);
+	EnemyPerceptionComponent->SetDominantSense(sightConfig->GetSenseImplementation());
+
+	UAIPerceptionSystem::RegisterPerceptionStimuliSource(this, sightConfig->GetSenseImplementation(), GetPawn());
+	//not seeing player yet
+	sightConfig->SightRadius = 300.0f;
+	sightConfig->LoseSightRadius = 350.0f;
+	sightConfig->PeripheralVisionAngleDegrees = 110.0f;
+	sightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	sightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	sightConfig->DetectionByAffiliation.bDetectFriendlies = false;
+	EnemyPerceptionComponent->ConfigureSense(*sightConfig);
+	EnemyPerceptionComponent->SetDominantSense(sightConfig->GetSenseImplementation());
 }
 
 void AEnemyController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (IsValid(BehaviorTree.Get())) 
+	{
+		RunBehaviorTree(BehaviorTree.Get());
+		BehaviorTreeComponent->StartTree(*BehaviorTree.Get());
+	}
+
+	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::PerceptionUpdated);
+
+
 	//move to position after timer has finished
-	FTimerHandle MoveTimer;
-	GetWorld()->GetTimerManager().SetTimer(MoveTimer, this, &AEnemyController::MoveToPosition, 0.1f, false);
+	//FTimerHandle MoveTimer;
+	//GetWorld()->GetTimerManager().SetTimer(MoveTimer, this, &AEnemyController::MoveToPosition, 0.1f, false);
+}
+
+void AEnemyController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+
+
+	if (IsValid(BlackboardComponent.Get()) && IsValid(BehaviorTree.Get()))
+	{
+		Blackboard->InitializeBlackboard(*BehaviorTree.Get()->BlackboardAsset.Get());
+	}
+}
+
+void AEnemyController::PerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.0f, FColor::Black, "Saw new thing");
+	if (Stimulus.WasSuccessfullySensed())
+	{
+		if (Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>())
+		{
+		}
+	}
 }
 
 void AEnemyController::MoveToPosition()
@@ -60,3 +115,4 @@ void AEnemyController::FindRandomPoint()
 		FindRandomPoint();
 	}
 }
+
