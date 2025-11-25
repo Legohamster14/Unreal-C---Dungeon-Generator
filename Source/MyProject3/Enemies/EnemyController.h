@@ -23,11 +23,20 @@ public:
 
 	void FindRandomPoint();
 
+	UFUNCTION()
 	void PerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
 	FVector Destination;
 
 	UNavigationSystemV1* NavSystem;
+
+	float LineOfSightTimer = 4.0f;
+
+	FTimerHandle EnemyTimer;
+
+	FName HasLineOfSight = "HasLineOfSight";
+
+	FName PlayerActor = "PlayerActor";
 
 protected:
 
@@ -35,7 +44,10 @@ protected:
 
 	virtual void OnPossess(APawn* InPawn) override;
 
-	
+	void StartEnemyTimer();
+
+
+	FString BehaviorTreePath = "MyProject3/Enemies/BT_Enemy";
 
 	AEnemyController();
 
@@ -52,5 +64,5 @@ protected:
 	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
-	TObjectPtr<UBlackboardComponent> BlackboardComponent;
+	UBlackboardComponent* BlackboardComponent;
 };

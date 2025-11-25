@@ -23,7 +23,6 @@ AEnemyController::AEnemyController()
 	EnemyPerceptionComponent->SetDominantSense(sightConfig->GetSenseImplementation());
 
 	UAIPerceptionSystem::RegisterPerceptionStimuliSource(this, sightConfig->GetSenseImplementation(), GetPawn());
-	//not seeing player yet
 	sightConfig->SightRadius = 300.0f;
 	sightConfig->LoseSightRadius = 350.0f;
 	sightConfig->PeripheralVisionAngleDegrees = 110.0f;
@@ -45,33 +44,38 @@ void AEnemyController::BeginPlay()
 	}
 
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::PerceptionUpdated);
-
-
-	//move to position after timer has finished
-	//FTimerHandle MoveTimer;
-	//GetWorld()->GetTimerManager().SetTimer(MoveTimer, this, &AEnemyController::MoveToPosition, 0.1f, false);
 }
 
 void AEnemyController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+}
 
-
-
-	if (IsValid(BlackboardComponent.Get()) && IsValid(BehaviorTree.Get()))
-	{
-		Blackboard->InitializeBlackboard(*BehaviorTree.Get()->BlackboardAsset.Get());
-	}
+void AEnemyController::StartEnemyTimer()
+{
+	Blackboard->SetValueAsBool(HasLineOfSight, true);
+	Blackboard->SetValueAsObject(PlayerActor, nullptr);
 }
 
 void AEnemyController::PerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.0f, FColor::Black, "Saw new thing");
 	if (Stimulus.WasSuccessfullySensed())
 	{
 		if (Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>())
 		{
+			if (Actor->ActorHasTag("Player")) 
+			{
+				GEngine->AddOnScreenDebugMessage(INDEX_NONE, 3.0f, FColor::Blue, TEXT("Saw Player"));
+				GetWorldTimerManager().ClearTimer(EnemyTimer);
+
+				Blackboard->SetValueAsBool(HasLineOfSight, true);
+				Blackboard->SetValueAsObject(PlayerActor, Actor);
+			}
 		}
+	}
+	else
+	{
+		GetWorldTimerManager().SetTimer(EnemyTimer, this, &AEnemyController::StartEnemyTimer, LineOfSightTimer, false);
 	}
 }
 
