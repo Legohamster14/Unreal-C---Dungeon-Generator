@@ -2,6 +2,8 @@
 
 
 #include "MyProject3/Enemies/EnemyBase.h"
+//Make enemy attack player
+
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -23,6 +25,9 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (Health <= 0) {
+		Destroy();
+	}
 }
 
 // Called to bind functionality to input

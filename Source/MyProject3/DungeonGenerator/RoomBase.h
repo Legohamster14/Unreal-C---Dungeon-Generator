@@ -28,6 +28,8 @@ public:
 	USceneComponent* OverlapFolder;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* PropSpawnerFolder;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* MiscFolder;
 
 protected:
 	// Called when the game starts or when spawned
@@ -58,6 +60,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* Floor;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* Ceiling;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UBoxComponent* BoxCollision;

@@ -17,6 +17,7 @@ ARoomBase::ARoomBase()
 	OverlapFolder = CreateDefaultSubobject<USceneComponent>(TEXT("OverlapFolder"));
 	ExitPointsFolder = CreateDefaultSubobject<USceneComponent>(TEXT("ExitPointsFolder"));
 	PropSpawnerFolder = CreateDefaultSubobject<USceneComponent>(TEXT("PropSpawnerFolder"));
+	MiscFolder = CreateDefaultSubobject<USceneComponent>(TEXT("MiscFolder"));
 
 	Cube_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube_1"));
 	Cube_2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube_2"));
@@ -28,6 +29,7 @@ ARoomBase::ARoomBase()
 	Cube_8 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube_8"));
 
 	Floor = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Floor"));
+	Ceiling = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ceiling"));
 
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
@@ -40,6 +42,7 @@ ARoomBase::ARoomBase()
 	OverlapFolder->SetupAttachment(DefaultSceneRoot);
 	ExitPointsFolder->SetupAttachment(DefaultSceneRoot);
 	PropSpawnerFolder->SetupAttachment(DefaultSceneRoot);
+	MiscFolder->SetupAttachment(DefaultSceneRoot);
 
 	Cube_1->SetupAttachment(GeometryFolder);
 	Cube_2->SetupAttachment(GeometryFolder);
@@ -50,6 +53,7 @@ ARoomBase::ARoomBase()
 	Cube_7->SetupAttachment(GeometryFolder);
 	Cube_8->SetupAttachment(GeometryFolder);
 	Floor->SetupAttachment(GeometryFolder);
+	Ceiling->SetupAttachment(GeometryFolder);
 
 	BoxCollision->SetupAttachment(OverlapFolder);
 

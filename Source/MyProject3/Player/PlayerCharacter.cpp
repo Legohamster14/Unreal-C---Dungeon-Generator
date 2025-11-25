@@ -3,6 +3,8 @@
 
 #include "MyProject3/Player/PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/BoxComponent.h"
+#include "MyProject3/Enemies/EnemyBase.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -14,6 +16,11 @@ APlayerCharacter::APlayerCharacter()
 	Camera->SetupAttachment(RootComponent);
 	Camera->bUsePawnControlRotation = true;
 
+	AttackArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Attack Area"));
+	AttackArea->SetGenerateOverlapEvents(true);
+	AttackArea->SetupAttachment(RootComponent);
+	AttackArea->SetCollisionProfileName("Trigger", false);
+
 }
 
 // Called when the game starts or when spawned
@@ -21,19 +28,24 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AttackArea->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnAttackAreaOverlap);
+	//AttackArea->SetActive(false);
+	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True"): TEXT("False"))));
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
 
 	//binds Keybord inputs for player
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -76,3 +88,27 @@ void APlayerCharacter::CameraPitch(float InputValue)
 	AddControllerPitchInput(InputValue);
 }
 
+void APlayerCharacter::Attack()
+{
+	AttackArea->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	FTimerHandle StopAttackTimer;
+	GetWorldTimerManager().SetTimer(StopAttackTimer, this, &APlayerCharacter::StopAttack, 0.1f, false);
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True") : TEXT("False"))));
+	//attack works
+}
+
+void APlayerCharacter::StopAttack()
+{
+	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True") : TEXT("False"))));
+}
+
+void APlayerCharacter::OnAttackAreaOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (Cast<AEnemyBase>(OtherActor))
+	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Blue, TEXT("overlapp with enemy"));
+		Cast<AEnemyBase>(OtherActor)->Health -= 10;
+	}
+}

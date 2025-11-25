@@ -19,14 +19,8 @@ class MYPROJECT3_API AEnemyController : public AAIController
 
 public:
 
-	void MoveToPosition();
-
-	void FindRandomPoint();
-
 	UFUNCTION()
 	void PerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
-
-	FVector Destination;
 
 	UNavigationSystemV1* NavSystem;
 
@@ -45,9 +39,6 @@ protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 	void StartEnemyTimer();
-
-
-	FString BehaviorTreePath = "MyProject3/Enemies/BT_Enemy";
 
 	AEnemyController();
 

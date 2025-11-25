@@ -21,6 +21,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	int32 Health = 100;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,9 +30,18 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, Category = "Components")
+	class UBoxComponent* AttackArea;
+
 	void MoveForward(float InputValue);
 	void MoveRight(float InputValue);
 
 	void CameraYaw(float InputValue);
 	void CameraPitch(float InputValue);	
+
+	void Attack();
+	void StopAttack();
+
+	UFUNCTION()
+	void OnAttackAreaOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };
