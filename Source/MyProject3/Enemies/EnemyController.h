@@ -33,6 +33,7 @@ public:
 	FName PlayerActor = "PlayerActor";
 
 protected:
+	virtual void Tick(float DeltaTime) override;
 
 	virtual void BeginPlay() override;
 
@@ -42,7 +43,14 @@ protected:
 
 	AEnemyController();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "LostFerry", meta = (AllowPrivateAccess = true))
+	float DistanceToPlayer;
+	float AttackCooldown;
+	
+	FVector PlayerLocation;
+
+	AActor* Player;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UAIPerceptionComponent> EnemyPerceptionComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")

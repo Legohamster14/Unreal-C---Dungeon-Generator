@@ -29,7 +29,6 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	AttackArea->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnAttackAreaOverlap);
-	//AttackArea->SetActive(false);
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True"): TEXT("False"))));
 }
@@ -38,6 +37,12 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (Health <= 0)
+	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Blue, TEXT("Player ded"));
+		//Destroy();
+	}
 }
 
 // Called to bind functionality to input

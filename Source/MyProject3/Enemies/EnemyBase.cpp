@@ -2,6 +2,8 @@
 
 
 #include "MyProject3/Enemies/EnemyBase.h"
+#include "Components/BoxComponent.h"
+#include "MyProject3/Player/PlayerCharacter.h"
 //Make enemy attack player
 
 
@@ -11,6 +13,10 @@ AEnemyBase::AEnemyBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AttackArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Attack Area"));
+	AttackArea->SetGenerateOverlapEvents(true);
+	AttackArea->SetupAttachment(RootComponent);
+	AttackArea->SetCollisionProfileName("Trigger", false);
 }
 
 // Called when the game starts or when spawned
@@ -18,6 +24,8 @@ void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AttackArea->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnAttackAreaOverlap);
+	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called every frame
@@ -28,6 +36,8 @@ void AEnemyBase::Tick(float DeltaTime)
 	if (Health <= 0) {
 		Destroy();
 	}
+	
+	AttackCooldown -= DeltaTime;
 }
 
 // Called to bind functionality to input
@@ -37,3 +47,25 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+void AEnemyBase::OnAttackAreaOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (Cast<APlayerCharacter>(OtherActor))
+	{
+		Cast<APlayerCharacter>(OtherActor)->Health -= 10;
+	}
+}
+
+void AEnemyBase::Attack()
+{
+	AttackArea->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	FTimerHandle StopAttackTimer;
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.f, FColor::Blue, TEXT("Attack Started"));
+	GetWorldTimerManager().SetTimer(StopAttackTimer, this, &AEnemyBase::StopAttack, .1f, false);
+}
+
+void AEnemyBase::StopAttack()
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.f, FColor::Blue, TEXT("Attack Stoppedd"));
+	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}

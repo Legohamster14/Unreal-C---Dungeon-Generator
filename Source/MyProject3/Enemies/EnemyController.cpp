@@ -33,6 +33,24 @@ AEnemyController::AEnemyController()
 	EnemyPerceptionComponent->SetDominantSense(sightConfig->GetSenseImplementation());
 }
 
+void AEnemyController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	AttackCooldown -= DeltaTime;
+
+	if (Player)
+	{
+		DistanceToPlayer = (GetPawn()->GetActorLocation() - Player->GetActorLocation()).Size();
+
+		if (DistanceToPlayer <= 100.f && AttackCooldown <= 0)
+		{
+			AttackCooldown = .5f;
+			Cast<AEnemyBase>(GetPawn())->Attack();
+		}
+	}
+}
+
 void AEnemyController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -44,6 +62,7 @@ void AEnemyController::BeginPlay()
 	}
 
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::PerceptionUpdated);
+
 }
 
 void AEnemyController::OnPossess(APawn* InPawn)
@@ -67,6 +86,7 @@ void AEnemyController::PerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 			{
 				GetWorldTimerManager().ClearTimer(EnemyTimer);
 
+				Player = Actor;
 				Blackboard->SetValueAsBool(HasLineOfSight, true);
 				Blackboard->SetValueAsObject(PlayerActor, Actor);
 			}
