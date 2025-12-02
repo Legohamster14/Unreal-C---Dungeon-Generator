@@ -10,6 +10,7 @@ class ARB_DungeonRoom5;
 class ARoomBase;
 class AClosingWall;
 class APropBase;
+class AEnemyBase;
 
 UCLASS()
 class MYPROJECT3_API ADungeonGenerator : public AActor
@@ -35,6 +36,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Room Info")
 	int32 RoomAmount = 20;
 
+	UPROPERTY(EditAnywhere, Category = "Enemies")
+	int32 EnemyAmount = 20;
+
+	UPROPERTY(EditAnywhere, Category = "Enemies")
+	TArray<TSubclassOf<AEnemyBase>> SpawnableEnemies;
+
+	AEnemyBase* LatestSpawnedEnemy;
+
 	bool bRoomCanSpawn;
 
 	ARoomBase* LatestSpawnedRoom;
@@ -53,7 +62,11 @@ public:
 
 	void SpawnProps();
 
+	void SpawnEnemies();
+
 	virtual void Tick(float DeltaTime) override;
+
+	class UNavigationSystemV1* NavSystem;
 
 protected:
 	// Called when the game starts or when spawned

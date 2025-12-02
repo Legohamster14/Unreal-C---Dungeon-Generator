@@ -7,6 +7,9 @@
 #include "Components/BoxComponent.h"
 #include "MyProject3/DungeonGenerator/ClosingWall.h"
 #include "MyProject3/DungeonGenerator/PropBase.h"
+#include "MyProject3/Enemies/EnemyBase.h"
+#include "NavigationSystem.h"
+#include "NavigationPath.h"
 
 // Sets default values
 ADungeonGenerator::ADungeonGenerator()
@@ -23,6 +26,7 @@ void ADungeonGenerator::BeginPlay()
 
 	FTimerHandle UnusedExitsHandle;
 	FTimerHandle SpawnPropsHandle;
+	FTimerHandle SpawnEnemies;
 	
 	//spawns the first room and starts the loop to generate the rest
 	SpawnStarterRoom();
@@ -31,8 +35,11 @@ void ADungeonGenerator::BeginPlay()
 	//close unused exits and spawn props after 1 second
 	GetWorld()->GetTimerManager().SetTimer(UnusedExitsHandle, this, &ADungeonGenerator::CloseUnusedExits, 1.0f, false);
 	GetWorld()->GetTimerManager().SetTimer(SpawnPropsHandle, this, &ADungeonGenerator::SpawnProps, 1.0f, false);
+	//spawns enemies after 2 seconds
+	GetWorldTimerManager().SetTimer(SpawnEnemies, this, &ADungeonGenerator::SpawnEnemies, 2.0f, false);
 
-
+	//gets the nav mesh
+	NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
 }
 
 // Called every frame
@@ -137,5 +144,25 @@ void ADungeonGenerator::SpawnProps()
 
 		SpawnedProp->SetActorLocation(Element->GetComponentLocation());
 		SpawnedProp->SetActorRotation(FRotator(0.0f, rand() % 360, 0.0f));
+	}
+}
+
+void ADungeonGenerator::SpawnEnemies()
+{
+	//finds a random point on the nav mesh
+	FVector RandomPoint;
+	FNavLocation RandomNavPoint;
+	RandomPoint = RandomNavPoint;
+
+	//spawn an enemy at the random point
+	LatestSpawnedEnemy = this->GetWorld()->SpawnActor<AEnemyBase>(SpawnableEnemies[rand() % SpawnableEnemies.Num()]);
+	FVector SpawnOffset = FVector(0, 0, 100);
+	LatestSpawnedEnemy->SetActorLocation(RandomPoint + SpawnOffset);
+
+	EnemyAmount--;
+
+	if (EnemyAmount > 0)
+	{
+		SpawnEnemies();
 	}
 }

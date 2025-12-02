@@ -23,9 +23,9 @@ AEnemyController::AEnemyController()
 	EnemyPerceptionComponent->SetDominantSense(sightConfig->GetSenseImplementation());
 
 	UAIPerceptionSystem::RegisterPerceptionStimuliSource(this, sightConfig->GetSenseImplementation(), GetPawn());
-	sightConfig->SightRadius = 300.0f;
-	sightConfig->LoseSightRadius = 350.0f;
-	sightConfig->PeripheralVisionAngleDegrees = 110.0f;
+	sightConfig->SightRadius = 1000.0f;
+	sightConfig->LoseSightRadius = 1100.0f;
+	sightConfig->PeripheralVisionAngleDegrees = 120.0f;
 	sightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	sightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	sightConfig->DetectionByAffiliation.bDetectFriendlies = false;
@@ -37,8 +37,8 @@ void AEnemyController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//attacks the player when close
 	AttackCooldown -= DeltaTime;
-
 	if (Player)
 	{
 		DistanceToPlayer = (GetPawn()->GetActorLocation() - Player->GetActorLocation()).Size();
@@ -61,6 +61,7 @@ void AEnemyController::BeginPlay()
 		BehaviorTreeComponent->StartTree(*BehaviorTree.Get());
 	}
 
+	//run the function when something enters perception area
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyController::PerceptionUpdated);
 
 }
@@ -72,7 +73,7 @@ void AEnemyController::OnPossess(APawn* InPawn)
 
 void AEnemyController::StartEnemyTimer()
 {
-	Blackboard->SetValueAsBool(HasLineOfSight, true);
+	Blackboard->SetValueAsBool(HasLineOfSight, false);
 	Blackboard->SetValueAsObject(PlayerActor, nullptr);
 }
 
@@ -85,7 +86,7 @@ void AEnemyController::PerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 			if (Actor->ActorHasTag("Player")) 
 			{
 				GetWorldTimerManager().ClearTimer(EnemyTimer);
-
+				//tells behaviour tree that player has been percieved
 				Player = Actor;
 				Blackboard->SetValueAsBool(HasLineOfSight, true);
 				Blackboard->SetValueAsObject(PlayerActor, Actor);

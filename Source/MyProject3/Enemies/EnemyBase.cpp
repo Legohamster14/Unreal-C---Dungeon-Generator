@@ -24,6 +24,7 @@ void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//setup the attack area
 	AttackArea->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnAttackAreaOverlap);
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
@@ -33,6 +34,7 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//destroys itself when health is below 0
 	if (Health <= 0) {
 		Destroy();
 	}
@@ -47,6 +49,8 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+
+//takes health away from the other actor if it is the player
 void AEnemyBase::OnAttackAreaOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (Cast<APlayerCharacter>(OtherActor))
@@ -55,17 +59,18 @@ void AEnemyBase::OnAttackAreaOverlap(UPrimitiveComponent* OverlappedComp, AActor
 	}
 }
 
+
+//turns attack area collision on
 void AEnemyBase::Attack()
 {
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
 	FTimerHandle StopAttackTimer;
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.f, FColor::Blue, TEXT("Attack Started"));
 	GetWorldTimerManager().SetTimer(StopAttackTimer, this, &AEnemyBase::StopAttack, .1f, false);
 }
 
+//turns attack area collision off
 void AEnemyBase::StopAttack()
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.f, FColor::Blue, TEXT("Attack Stoppedd"));
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

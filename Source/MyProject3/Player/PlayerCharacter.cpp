@@ -16,6 +16,7 @@ APlayerCharacter::APlayerCharacter()
 	Camera->SetupAttachment(RootComponent);
 	Camera->bUsePawnControlRotation = true;
 
+	//setup the attack area
 	AttackArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Attack Area"));
 	AttackArea->SetGenerateOverlapEvents(true);
 	AttackArea->SetupAttachment(RootComponent);
@@ -28,6 +29,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//box collision will trigger function on onoverlap
 	AttackArea->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnAttackAreaOverlap);
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True"): TEXT("False"))));
@@ -50,6 +52,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	//binds mouse input for attack
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
 
 	//binds Keybord inputs for player
@@ -93,27 +96,28 @@ void APlayerCharacter::CameraPitch(float InputValue)
 	AddControllerPitchInput(InputValue);
 }
 
+
+//turns attack area collision on
 void APlayerCharacter::Attack()
 {
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
 	FTimerHandle StopAttackTimer;
 	GetWorldTimerManager().SetTimer(StopAttackTimer, this, &APlayerCharacter::StopAttack, 0.1f, false);
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True") : TEXT("False"))));
-	//attack works
 }
 
+
+//turns attack area collision off
 void APlayerCharacter::StopAttack()
 {
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True") : TEXT("False"))));
 }
 
 void APlayerCharacter::OnAttackAreaOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	//takes away health if the other actor is an enemy
 	if (Cast<AEnemyBase>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Blue, TEXT("overlapp with enemy"));
 		Cast<AEnemyBase>(OtherActor)->Health -= 10;
 	}
 }
