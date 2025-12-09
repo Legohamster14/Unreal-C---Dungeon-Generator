@@ -42,7 +42,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (Health <= 0)
 	{
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Blue, TEXT("Player ded"));
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 4.0f, FColor::Blue, TEXT("Player dead"));
 		//Destroy();
 	}
 }

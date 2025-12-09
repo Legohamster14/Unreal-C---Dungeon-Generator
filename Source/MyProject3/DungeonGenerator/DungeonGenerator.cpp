@@ -152,7 +152,12 @@ void ADungeonGenerator::SpawnEnemies()
 	//finds a random point on the nav mesh
 	FVector RandomPoint;
 	FNavLocation RandomNavPoint;
-	RandomPoint = RandomNavPoint;
+
+	if (NavSystem->GetRandomPointInNavigableRadius(FVector(0, 0, 0), 100000000000.0f, RandomNavPoint))
+	{
+		RandomPoint = RandomNavPoint;
+	}
+
 
 	//spawn an enemy at the random point
 	LatestSpawnedEnemy = this->GetWorld()->SpawnActor<AEnemyBase>(SpawnableEnemies[rand() % SpawnableEnemies.Num()]);
