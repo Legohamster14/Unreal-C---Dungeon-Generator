@@ -27,6 +27,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Rooms")
 	TArray<TSubclassOf<ARoomBase>> SpawnableRooms;
 
+	UPROPERTY(EditAnywhere, Category = "Rooms")
+	TArray<ARoomBase*> SpawnedRooms;
+
 	UPROPERTY(EditAnywhere, Category = "Unused Exits Closing Wall")
 	TSubclassOf<AClosingWall> ClosingWall;
 

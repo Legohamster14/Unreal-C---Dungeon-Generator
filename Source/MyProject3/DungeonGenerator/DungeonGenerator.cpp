@@ -26,17 +26,17 @@ void ADungeonGenerator::BeginPlay()
 
 	FTimerHandle UnusedExitsHandle;
 	FTimerHandle SpawnPropsHandle;
-	FTimerHandle SpawnEnemies;
+	FTimerHandle SpawnEnemiesHandle;
 	
 	//spawns the first room and starts the loop to generate the rest
 	SpawnStarterRoom();
 	SpawnNextRoom();
 
 	//close unused exits and spawn props after 1 second
-	GetWorld()->GetTimerManager().SetTimer(UnusedExitsHandle, this, &ADungeonGenerator::CloseUnusedExits, 1.0f, false);
-	GetWorld()->GetTimerManager().SetTimer(SpawnPropsHandle, this, &ADungeonGenerator::SpawnProps, 1.0f, false);
+	//GetWorld()->GetTimerManager().SetTimer(UnusedExitsHandle, this, &ADungeonGenerator::CloseUnusedExits, 1.0f, false);
+	//GetWorld()->GetTimerManager().SetTimer(SpawnPropsHandle, this, &ADungeonGenerator::SpawnProps, 1.0f, false);
 	//spawns enemies after 2 seconds
-	GetWorldTimerManager().SetTimer(SpawnEnemies, this, &ADungeonGenerator::SpawnEnemies, 2.0f, false);
+	//GetWorldTimerManager().SetTimer(SpawnEnemies, this, &ADungeonGenerator::SpawnEnemies, 2.0f, false);
 
 	//gets the nav mesh
 	NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
@@ -89,12 +89,18 @@ void ADungeonGenerator::SpawnNextRoom()
 		TArray<USceneComponent*> LatestSpawnPoints;
 		LatestSpawnedRoom->PropSpawnerFolder->GetChildrenComponents(false, LatestSpawnPoints);
 		PropSpawnPoints.Append(LatestSpawnPoints);
+
+		SpawnedRooms.Add(LatestSpawnedRoom);
 	}
 
 	RoomAmount--;
 
 	if (RoomAmount > 0) {
 		SpawnNextRoom();
+	}
+	else {
+		CloseUnusedExits();
+		SpawnProps();
 	}
 }
 
@@ -112,7 +118,7 @@ void ADungeonGenerator::RemoveOverlappingRooms()
 
 
 	//removes the room if there is overlap
-	for (UPrimitiveComponent* Element : OverlappingComponents)
+	if (OverlappingComponents.Num() > 0)
 	{
 		bRoomCanSpawn = false;
 		RoomAmount++;
@@ -145,6 +151,9 @@ void ADungeonGenerator::SpawnProps()
 		SpawnedProp->SetActorLocation(Element->GetComponentLocation());
 		SpawnedProp->SetActorRotation(FRotator(0.0f, rand() % 360, 0.0f));
 	}
+	FTimerHandle SpawnEnemiesHandle;
+
+	GetWorldTimerManager().SetTimer(SpawnEnemiesHandle, this, &ADungeonGenerator::SpawnEnemies, 2.0f, false);
 }
 
 void ADungeonGenerator::SpawnEnemies()
@@ -152,22 +161,30 @@ void ADungeonGenerator::SpawnEnemies()
 	//finds a random point on the nav mesh
 	FVector RandomPoint;
 	FNavLocation RandomNavPoint;
+	FVector RandomRoomPosition;
 
-	if (NavSystem->GetRandomPointInNavigableRadius(FVector(0, 0, 0), 100000000000.0f, RandomNavPoint))
+	RandomRoomPosition = SpawnedRooms[rand() % SpawnedRooms.Num()]->GetActorLocation();
+
+
+	if (NavSystem->GetRandomPointInNavigableRadius(RandomRoomPosition, 10000.0f, RandomNavPoint))
 	{
 		RandomPoint = RandomNavPoint;
+		//spawn an enemy at the random point
+		LatestSpawnedEnemy = this->GetWorld()->SpawnActor<AEnemyBase>(SpawnableEnemies[rand() % SpawnableEnemies.Num()]);
+		FVector SpawnOffset = FVector(0, 0, 100);
+		LatestSpawnedEnemy->SetActorLocation(RandomPoint + SpawnOffset);
+
+		EnemyAmount--;
+
+		if (EnemyAmount > 0)
+		{
+			SpawnEnemies();
+		}
 	}
-
-
-	//spawn an enemy at the random point
-	LatestSpawnedEnemy = this->GetWorld()->SpawnActor<AEnemyBase>(SpawnableEnemies[rand() % SpawnableEnemies.Num()]);
-	FVector SpawnOffset = FVector(0, 0, 100);
-	LatestSpawnedEnemy->SetActorLocation(RandomPoint + SpawnOffset);
-
-	EnemyAmount--;
-
-	if (EnemyAmount > 0)
+	else
 	{
 		SpawnEnemies();
 	}
+
+
 }
