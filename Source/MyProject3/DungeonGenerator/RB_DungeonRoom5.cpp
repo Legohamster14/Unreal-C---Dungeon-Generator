@@ -10,21 +10,53 @@ ARB_DungeonRoom5::ARB_DungeonRoom5()
 	ExitPoint2 = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitPoint2"));
 	ExitPoint3 = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitPoint3"));
 
-	PropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner1"));
-	PropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner2"));
-	PropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner3"));
-	PropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner4"));
-	PropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner5"));
-	PropSpawner6 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner6"));
+	BigPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner1"));
+	BigPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner2"));
+	BigPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner3"));
+	BigPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner4"));
+	BigPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner5"));
+	BigPropSpawner6 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner6"));
+
+	SmallPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner1"));
+	SmallPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner2"));
+	SmallPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner3"));
+	SmallPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner4"));
+	SmallPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner5"));
+	SmallPropSpawner6 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner6"));
+	SmallPropSpawner7 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner7"));
+	SmallPropSpawner8 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner8"));
+	SmallPropSpawner9 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner9"));
+	SmallPropSpawner10 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner10"));
+	SmallPropSpawner11 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner11"));
+	SmallPropSpawner12 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner12"));
+	SmallPropSpawner13 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner13"));
+	SmallPropSpawner14 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner14"));
+	SmallPropSpawner15 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner15"));
 
 	ExitPoint1->SetupAttachment(ExitPointsFolder);
 	ExitPoint2->SetupAttachment(ExitPointsFolder);
 	ExitPoint3->SetupAttachment(ExitPointsFolder);
 
-	PropSpawner1->SetupAttachment(PropSpawnerFolder);
-	PropSpawner2->SetupAttachment(PropSpawnerFolder);
-	PropSpawner3->SetupAttachment(PropSpawnerFolder);
-	PropSpawner4->SetupAttachment(PropSpawnerFolder);
-	PropSpawner5->SetupAttachment(PropSpawnerFolder);
-	PropSpawner6->SetupAttachment(PropSpawnerFolder);
+	BigPropSpawner1->SetupAttachment(BigPropsFolder);
+	BigPropSpawner2->SetupAttachment(BigPropsFolder);
+	BigPropSpawner3->SetupAttachment(BigPropsFolder);
+	BigPropSpawner4->SetupAttachment(BigPropsFolder);
+	BigPropSpawner5->SetupAttachment(BigPropsFolder);
+	BigPropSpawner6->SetupAttachment(BigPropsFolder);
+
+	SmallPropSpawner1->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner2->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner3->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner4->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner5->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner6->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner7->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner8->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner9->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner10->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner11->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner12->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner13->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner14->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner15->SetupAttachment(SmallPropsFolder);
 }

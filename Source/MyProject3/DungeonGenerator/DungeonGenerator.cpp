@@ -10,6 +10,8 @@
 #include "MyProject3/Enemies/EnemyBase.h"
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
+#include "MyProject3/DungeonGenerator/Chest.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ADungeonGenerator::ADungeonGenerator()
@@ -23,23 +25,17 @@ ADungeonGenerator::ADungeonGenerator()
 void ADungeonGenerator::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FTimerHandle UnusedExitsHandle;
-	FTimerHandle SpawnPropsHandle;
-	FTimerHandle SpawnEnemiesHandle;
 	
 	//spawns the first room and starts the loop to generate the rest
 	SpawnStarterRoom();
 	SpawnNextRoom();
 
-	//close unused exits and spawn props after 1 second
-	//GetWorld()->GetTimerManager().SetTimer(UnusedExitsHandle, this, &ADungeonGenerator::CloseUnusedExits, 1.0f, false);
-	//GetWorld()->GetTimerManager().SetTimer(SpawnPropsHandle, this, &ADungeonGenerator::SpawnProps, 1.0f, false);
-	//spawns enemies after 2 seconds
-	//GetWorldTimerManager().SetTimer(SpawnEnemies, this, &ADungeonGenerator::SpawnEnemies, 2.0f, false);
-
 	//gets the nav mesh
 	NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
+
+	FTimerHandle EndGoalSpawnerHandle;
+
+	GetWorldTimerManager().SetTimer(EndGoalSpawnerHandle, this, &ADungeonGenerator::SpawnEndGoal, 2.0f, false);
 }
 
 // Called every frame
@@ -60,7 +56,7 @@ void ADungeonGenerator::SpawnStarterRoom()
 
 	//puts the exit points of the starter room into an array
 	SpawnedStarterRoom->ExitPointsFolder->GetChildrenComponents(false, Exits);
-	SpawnedStarterRoom->PropSpawnerFolder->GetChildrenComponents(false, PropSpawnPoints);
+	SpawnedStarterRoom->PropSpawnerFolder->GetChildrenComponents(false, BigPropSpawnPoints);
 }
 
 void ADungeonGenerator::SpawnNextRoom()
@@ -86,9 +82,13 @@ void ADungeonGenerator::SpawnNextRoom()
 		LatestSpawnedRoom->ExitPointsFolder->GetChildrenComponents(false, LatestExitPoints);
 		Exits.Append(LatestExitPoints);
 
-		TArray<USceneComponent*> LatestSpawnPoints;
-		LatestSpawnedRoom->PropSpawnerFolder->GetChildrenComponents(false, LatestSpawnPoints);
-		PropSpawnPoints.Append(LatestSpawnPoints);
+		TArray<USceneComponent*> LatestBigSpawnPoints;
+		LatestSpawnedRoom->BigPropsFolder->GetChildrenComponents(false, LatestBigSpawnPoints);
+		BigPropSpawnPoints.Append(LatestBigSpawnPoints);
+
+		TArray<USceneComponent*> LatestSmallSpawnPoints;
+		LatestSpawnedRoom->SmallPropsFolder->GetChildrenComponents(false, LatestSmallSpawnPoints);
+		SmallPropSpawnPoints.Append(LatestSmallSpawnPoints);
 
 		SpawnedRooms.Add(LatestSpawnedRoom);
 	}
@@ -144,15 +144,27 @@ void ADungeonGenerator::CloseUnusedExits()
 void ADungeonGenerator::SpawnProps()
 {
 	//spawn props at every spawn point in the scene
-	for (USceneComponent* Element : PropSpawnPoints)
+	for (USceneComponent* Element : BigPropSpawnPoints)
 	{
-		APropBase* SpawnedProp = GetWorld()->SpawnActor<APropBase>(Props[rand() % Props.Num()]);
+		APropBase* SpawnedBigProp = GetWorld()->SpawnActor<APropBase>(BigProps[rand() % BigProps.Num()]);
 
-		SpawnedProp->SetActorLocation(Element->GetComponentLocation());
-		SpawnedProp->SetActorRotation(FRotator(0.0f, rand() % 360, 0.0f));
+		SpawnedBigProp->SetActorLocation(Element->GetComponentLocation());
+		SpawnedBigProp->SetActorRotation(FRotator(0.0f, rand() % 360, 0.0f));
+		SpawnedProps.Add(SpawnedBigProp);
 	}
+
+	for (USceneComponent* Element : SmallPropSpawnPoints)
+	{
+		APropBase* SpawnedSmallProp = GetWorld()->SpawnActor<APropBase>(SmallProps[rand() % SmallProps.Num()]);
+
+		SpawnedSmallProp->SetActorLocation(Element->GetComponentLocation());
+		SpawnedSmallProp->SetActorRotation(FRotator(0.0f, rand() % 360, 0.0f));
+		SpawnedProps.Add(SpawnedSmallProp);
+	}
+
 	FTimerHandle SpawnEnemiesHandle;
 
+	UE_LOG(LogTemp, Log, TEXT("Start Spawning Enemies"));
 	GetWorldTimerManager().SetTimer(SpawnEnemiesHandle, this, &ADungeonGenerator::SpawnEnemies, 2.0f, false);
 }
 
@@ -171,6 +183,7 @@ void ADungeonGenerator::SpawnEnemies()
 		RandomPoint = RandomNavPoint;
 		//spawn an enemy at the random point
 		LatestSpawnedEnemy = this->GetWorld()->SpawnActor<AEnemyBase>(SpawnableEnemies[rand() % SpawnableEnemies.Num()]);
+		SpawnedEnemies.Add(LatestSpawnedEnemy);
 		FVector SpawnOffset = FVector(0, 0, 100);
 		LatestSpawnedEnemy->SetActorLocation(RandomPoint + SpawnOffset);
 
@@ -187,4 +200,25 @@ void ADungeonGenerator::SpawnEnemies()
 	}
 
 
+}
+
+void ADungeonGenerator::SpawnEndGoal()
+{
+	ARoomBase* RandomRoom = SpawnedRooms[rand() % SpawnedRooms.Num()];
+	FNavLocation RandomNavPoint;
+	FVector OffsetInRoom = FVector(1000, 0, 0);
+	FVector SpawnOffset = FVector(0, 0, 50);
+
+	if (NavSystem->GetRandomPointInNavigableRadius(RandomRoom->GetActorLocation() + OffsetInRoom, 1400, RandomNavPoint))
+	{
+		//FIX THIS CENTER OF ROOM IS NOT IN THE CENTER
+		//SET SPAWN POINT
+		//SAME LOGIC AS PROP SPAWN
+		FVector RandomPoint = RandomNavPoint;
+		EndGoal = this->GetWorld()->SpawnActor<AChest>(ChestReference);
+		EndGoal->SetActorLocation(FVector(RandomPoint.X, RandomPoint.Y, 50));
+		FRotator EndGoalRotation = UKismetMathLibrary::FindLookAtRotation(EndGoal->GetActorLocation(), RandomRoom->GetActorLocation() + OffsetInRoom);
+		EndGoal->SetActorRotation(FRotator(0, EndGoalRotation.Yaw, 0));
+		//DrawDebugLine(GetWorld(), EndGoal->GetActorLocation(), RandomRoom->GetActorLocation() +, FColor::Green, true, 100.0f, 0, 10.0f);
+	}
 }

@@ -26,15 +26,46 @@ public:
 	UArrowComponent* ExitPoint3;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner1;
+	UArrowComponent* BigPropSpawner1;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner2;
+	UArrowComponent* BigPropSpawner2;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner3;
+	UArrowComponent* BigPropSpawner3;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner4;
+	UArrowComponent* BigPropSpawner4;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner5;
+	UArrowComponent* BigPropSpawner5;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner6;
+	UArrowComponent* BigPropSpawner6;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner1;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner2;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner3;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner4;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner5;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner6;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner7;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner8;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner9;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner10;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner11;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner12;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner13;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner14;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner15;
 };

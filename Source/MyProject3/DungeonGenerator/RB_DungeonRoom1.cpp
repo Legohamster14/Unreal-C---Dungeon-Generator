@@ -12,15 +12,27 @@ ARB_DungeonRoom1::ARB_DungeonRoom1()
 	ExitArrow2 = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitArrow2"));
 	ExitArrow3 = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitArrow3"));
 
-	PropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner1"));
-	PropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner2"));
+	BigPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner1"));
+	BigPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner2"));
+
+	SmallPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner1"));
+	SmallPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner2"));
+	SmallPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner3"));
+	SmallPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner4"));
+	SmallPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner5"));
 
 	//organise exit arrows
 	ExitArrow1->SetupAttachment(ExitPointsFolder);
 	ExitArrow2->SetupAttachment(ExitPointsFolder);
 	ExitArrow3->SetupAttachment(ExitPointsFolder);
 
-	PropSpawner1->SetupAttachment(PropSpawnerFolder);
-	PropSpawner2->SetupAttachment(PropSpawnerFolder);
+	BigPropSpawner1->SetupAttachment(BigPropsFolder);
+	BigPropSpawner2->SetupAttachment(BigPropsFolder);
+
+	SmallPropSpawner1->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner2->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner3->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner4->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner5->SetupAttachment(SmallPropsFolder);
 
 }

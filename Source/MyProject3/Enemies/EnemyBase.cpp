@@ -13,6 +13,10 @@ AEnemyBase::AEnemyBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Face = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Face"));
+	Face->SetupAttachment(RootComponent);
+	Face->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	AttackArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Attack Area"));
 	AttackArea->SetGenerateOverlapEvents(true);
 	AttackArea->SetupAttachment(RootComponent);

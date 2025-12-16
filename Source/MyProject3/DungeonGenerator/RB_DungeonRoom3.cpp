@@ -13,9 +13,15 @@ ARB_DungeonRoom3::ARB_DungeonRoom3()
 
 	ClosingWall = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ClosingWall1"));
 
-	PropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner1"));
-	PropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner2"));
-	PropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner3"));
+	BigPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner1"));
+	BigPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner2"));
+	BigPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner3"));
+
+	SmallPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner1"));
+	SmallPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner2"));
+	SmallPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner3"));
+	SmallPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner4"));
+	SmallPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner5"));
 
 	//organis exit arrows and closing wall
 	ExitArrow1->SetupAttachment(ExitPointsFolder);
@@ -23,7 +29,13 @@ ARB_DungeonRoom3::ARB_DungeonRoom3()
 
 	ClosingWall->SetupAttachment(GeometryFolder);
 
-	PropSpawner1->SetupAttachment(PropSpawnerFolder);
-	PropSpawner2->SetupAttachment(PropSpawnerFolder);
-	PropSpawner3->SetupAttachment(PropSpawnerFolder);
+	BigPropSpawner1->SetupAttachment(BigPropsFolder);
+	BigPropSpawner2->SetupAttachment(BigPropsFolder);
+	BigPropSpawner3->SetupAttachment(BigPropsFolder);
+
+	SmallPropSpawner1->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner2->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner3->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner4->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner5->SetupAttachment(SmallPropsFolder);
 }

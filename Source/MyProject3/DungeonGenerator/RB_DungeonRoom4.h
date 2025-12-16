@@ -22,7 +22,16 @@ public:
 	UArrowComponent* ExitPoint1;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner1;
+	UArrowComponent* BigPropSpawner1;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UArrowComponent* PropSpawner2;
+	UArrowComponent* SmallPropSpawner1;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner2;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner3;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner4;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* SmallPropSpawner5;
 };

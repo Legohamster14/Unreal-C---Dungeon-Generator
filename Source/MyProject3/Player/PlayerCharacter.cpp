@@ -5,6 +5,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/BoxComponent.h"
 #include "MyProject3/Enemies/EnemyBase.h"
+#include "MyProject3/PDGGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -29,6 +31,8 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	MyGameInstance = Cast<UPDGGameInstance>(GetGameInstance());
+
 	//box collision will trigger function on onoverlap
 	AttackArea->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnAttackAreaOverlap);
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -54,6 +58,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	//binds mouse input for attack
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerCharacter::Attack);
+
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::NextLevel);
 
 	//binds Keybord inputs for player
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -111,6 +117,16 @@ void APlayerCharacter::Attack()
 void APlayerCharacter::StopAttack()
 {
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void APlayerCharacter::NextLevel()
+{
+	if (bInRangeOfChest && MyGameInstance)
+	{
+		MyGameInstance->LevelsCleared++;
+		UE_LOG(LogTemp, Log, TEXT("%d"), MyGameInstance->LevelsCleared);
+		UGameplayStatics::OpenLevel(this, FName(GetWorld()->GetMapName()));
+	}
 }
 
 void APlayerCharacter::OnAttackAreaOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

@@ -18,6 +18,8 @@ ARoomBase::ARoomBase()
 	ExitPointsFolder = CreateDefaultSubobject<USceneComponent>(TEXT("ExitPointsFolder"));
 	PropSpawnerFolder = CreateDefaultSubobject<USceneComponent>(TEXT("PropSpawnerFolder"));
 	MiscFolder = CreateDefaultSubobject<USceneComponent>(TEXT("MiscFolder"));
+	BigPropsFolder = CreateDefaultSubobject<USceneComponent>(TEXT("BigPropsFolder"));
+	SmallPropsFolder = CreateDefaultSubobject<USceneComponent>(TEXT("SmallPropsFolder"));
 
 	Cube_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube_1"));
 	Cube_2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube_2"));
@@ -43,6 +45,8 @@ ARoomBase::ARoomBase()
 	ExitPointsFolder->SetupAttachment(DefaultSceneRoot);
 	PropSpawnerFolder->SetupAttachment(DefaultSceneRoot);
 	MiscFolder->SetupAttachment(DefaultSceneRoot);
+	SmallPropsFolder->SetupAttachment(PropSpawnerFolder);
+	BigPropsFolder->SetupAttachment(PropSpawnerFolder);
 
 	Cube_1->SetupAttachment(GeometryFolder);
 	Cube_2->SetupAttachment(GeometryFolder);

@@ -29,6 +29,10 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* PropSpawnerFolder;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* BigPropsFolder;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* SmallPropsFolder;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* MiscFolder;
 
 protected:

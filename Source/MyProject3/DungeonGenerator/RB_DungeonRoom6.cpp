@@ -15,11 +15,21 @@ ARB_DungeonRoom6::ARB_DungeonRoom6()
 	Cube9 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube9"));
 	Cube10 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube10"));
 
-	PropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner1"));
-	PropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner2"));
-	PropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner3"));
-	PropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner4"));
-	PropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner5"));
+	BigPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner1"));
+	BigPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner2"));
+	BigPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner3"));
+	BigPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner4"));
+	BigPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner5"));
+
+	SmallPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner1"));
+	SmallPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner2"));
+	SmallPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner3"));
+	SmallPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner4"));
+	SmallPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner5"));
+	SmallPropSpawner6 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner6"));
+	SmallPropSpawner7 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner7"));
+	SmallPropSpawner8 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner8"));
+	SmallPropSpawner9 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner9"));
 
 	ExitPoint1->SetupAttachment(ExitPointsFolder);
 	ExitPoint2->SetupAttachment(ExitPointsFolder);
@@ -30,9 +40,19 @@ ARB_DungeonRoom6::ARB_DungeonRoom6()
 	Cube9->SetupAttachment(GeometryFolder);
 	Cube10->SetupAttachment(GeometryFolder);
 
-	PropSpawner1->SetupAttachment(PropSpawnerFolder);
-	PropSpawner2->SetupAttachment(PropSpawnerFolder);
-	PropSpawner3->SetupAttachment(PropSpawnerFolder);
-	PropSpawner4->SetupAttachment(PropSpawnerFolder);
-	PropSpawner5->SetupAttachment(PropSpawnerFolder);
+	BigPropSpawner1->SetupAttachment(BigPropsFolder);
+	BigPropSpawner2->SetupAttachment(BigPropsFolder);
+	BigPropSpawner3->SetupAttachment(BigPropsFolder);
+	BigPropSpawner4->SetupAttachment(BigPropsFolder);
+	BigPropSpawner5->SetupAttachment(BigPropsFolder);
+
+	SmallPropSpawner1->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner2->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner3->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner4->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner5->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner6->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner7->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner8->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner9->SetupAttachment(SmallPropsFolder);
 }

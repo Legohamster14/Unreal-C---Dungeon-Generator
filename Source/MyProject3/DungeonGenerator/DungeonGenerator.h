@@ -11,6 +11,7 @@ class ARoomBase;
 class AClosingWall;
 class APropBase;
 class AEnemyBase;
+class AChest;
 
 UCLASS()
 class MYPROJECT3_API ADungeonGenerator : public AActor
@@ -30,11 +31,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Rooms")
 	TArray<ARoomBase*> SpawnedRooms;
 
+	UPROPERTY(EditAnywhere, Category = "Enemies")
+	TArray<AEnemyBase*> SpawnedEnemies;
+
 	UPROPERTY(EditAnywhere, Category = "Unused Exits Closing Wall")
 	TSubclassOf<AClosingWall> ClosingWall;
 
 	UPROPERTY(EditAnywhere, Category = "Props")
-	TArray<TSubclassOf<APropBase>> Props;
+	TArray<TSubclassOf<APropBase>> BigProps;
+
+	UPROPERTY(EditAnywhere, Category = "Props")
+	TArray<TSubclassOf<APropBase>> SmallProps;
+
+	UPROPERTY(EditAnywhere, Category = "Props")
+	TArray<APropBase*> SpawnedProps;
 
 	UPROPERTY(EditAnywhere, Category = "Room Info")
 	int32 RoomAmount = 20;
@@ -47,13 +57,20 @@ public:
 
 	AEnemyBase* LatestSpawnedEnemy;
 
+	UPROPERTY(EditAnywhere, Category = "End")
+	TSubclassOf<AChest> ChestReference;
+
+	AChest* EndGoal;
+
 	bool bRoomCanSpawn;
 
 	ARoomBase* LatestSpawnedRoom;
 
 	TArray<USceneComponent*> Exits;
 
-	TArray<USceneComponent*> PropSpawnPoints;
+	TArray<USceneComponent*> BigPropSpawnPoints;
+
+	TArray<USceneComponent*> SmallPropSpawnPoints;
 
 	void SpawnStarterRoom();
 
@@ -66,6 +83,8 @@ public:
 	void SpawnProps();
 
 	void SpawnEnemies();
+
+	void SpawnEndGoal();
 
 	virtual void Tick(float DeltaTime) override;
 

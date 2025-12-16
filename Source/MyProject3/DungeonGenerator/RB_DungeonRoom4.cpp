@@ -8,9 +8,21 @@ ARB_DungeonRoom4::ARB_DungeonRoom4()
 {
 	ExitPoint1 = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitPoint1"));
 
-	PropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("PropSpawner1"));
+	BigPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("BigPropSpawner1"));
+
+	SmallPropSpawner1 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner1"));
+	SmallPropSpawner2 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner2"));
+	SmallPropSpawner3 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner3"));
+	SmallPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner4"));
+	SmallPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner5"));
 
 	ExitPoint1->SetupAttachment(ExitPointsFolder);
 
-	PropSpawner1->SetupAttachment(PropSpawnerFolder);
+	BigPropSpawner1->SetupAttachment(BigPropsFolder);
+
+	SmallPropSpawner1->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner2->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner3->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner4->SetupAttachment(SmallPropsFolder);
+	SmallPropSpawner5->SetupAttachment(SmallPropsFolder);
 }
