@@ -63,4 +63,15 @@ public:
 	UArrowComponent* SmallPropSpawner8;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UArrowComponent* SmallPropSpawner9;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* ChestSpawn1;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* ChestSpawn2;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* ChestSpawn3;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* ChestSpawn4;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UArrowComponent* ChestSpawn5;
 };

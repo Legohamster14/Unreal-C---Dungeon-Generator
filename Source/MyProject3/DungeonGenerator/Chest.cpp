@@ -12,6 +12,8 @@ AChest::AChest()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
+
 	Chest = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Chest"));
 
 	TextComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Text Component"));
@@ -19,7 +21,8 @@ AChest::AChest()
 	TriggerArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger Area"));
 	TriggerArea->SetCollisionProfileName("Trigger", false);
 
-	Chest->SetupAttachment(RootComponent);
+	DefaultSceneRoot->SetupAttachment(RootComponent);
+	Chest->SetupAttachment(DefaultSceneRoot);
 	TriggerArea->SetupAttachment(Chest);
 	TextComponent->SetupAttachment(Chest);
 }
@@ -45,22 +48,18 @@ void AChest::Tick(float DeltaTime)
 
 void AChest::OnTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.0f, FColor::Blue, TEXT("Something entered trigger area"));
 	if (Cast<APlayerCharacter>(OtherActor))
 	{
 		Cast<APlayerCharacter>(OtherActor)->bInRangeOfChest = true;
 		TextComponent->SetVisibility(true);
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.0f, FColor::Blue, TEXT("Player entered trigger area"));
 	}
 }
 
 void AChest::OnTriggerEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.0f, FColor::Blue, TEXT("Something exited trigger area"));
 	if (Cast<APlayerCharacter>(OtherActor))
 	{
 		Cast<APlayerCharacter>(OtherActor)->bInRangeOfChest = false;
 		TextComponent->SetVisibility(false);
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.0f, FColor::Blue, TEXT("Player exited trigger area"));
 	}
 }

@@ -23,6 +23,10 @@ ARB_DungeonRoom3::ARB_DungeonRoom3()
 	SmallPropSpawner4 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner4"));
 	SmallPropSpawner5 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner5"));
 
+	ChestSpawn1 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn1"));
+	ChestSpawn2 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn2"));
+	ChestSpawn3 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn3"));
+
 	//organis exit arrows and closing wall
 	ExitArrow1->SetupAttachment(ExitPointsFolder);
 	ExitArrow2->SetupAttachment(ExitPointsFolder);
@@ -38,4 +42,8 @@ ARB_DungeonRoom3::ARB_DungeonRoom3()
 	SmallPropSpawner3->SetupAttachment(SmallPropsFolder);
 	SmallPropSpawner4->SetupAttachment(SmallPropsFolder);
 	SmallPropSpawner5->SetupAttachment(SmallPropsFolder);
+
+	ChestSpawn1->SetupAttachment(ChestSpawnFolder);
+	ChestSpawn2->SetupAttachment(ChestSpawnFolder);
+	ChestSpawn3->SetupAttachment(ChestSpawnFolder);
 }

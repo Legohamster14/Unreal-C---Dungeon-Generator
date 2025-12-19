@@ -47,10 +47,16 @@ public:
 	TArray<APropBase*> SpawnedProps;
 
 	UPROPERTY(EditAnywhere, Category = "Room Info")
-	int32 RoomAmount = 20;
+	int32 RoomAmount = 10;
+
+	UPROPERTY(EditAnywhere, Category = "Room Info")
+	int32 RoomsToAdd = 10;
 
 	UPROPERTY(EditAnywhere, Category = "Enemies")
-	int32 EnemyAmount = 20;
+	int32 EnemyAmount = 10;
+
+	UPROPERTY(EditAnywhere, Category = "Enemies")
+	int32 EnemiesToAdd = 5;
 
 	UPROPERTY(EditAnywhere, Category = "Enemies")
 	TArray<TSubclassOf<AEnemyBase>> SpawnableEnemies;
@@ -72,6 +78,8 @@ public:
 
 	TArray<USceneComponent*> SmallPropSpawnPoints;
 
+	TArray<USceneComponent*> ChestSpawnPoints;
+
 	void SpawnStarterRoom();
 
 	void SpawnNextRoom();
@@ -89,6 +97,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	class UNavigationSystemV1* NavSystem;
+
+	class UPDGGameInstance* MyGameInstance;
 
 protected:
 	// Called when the game starts or when spawned

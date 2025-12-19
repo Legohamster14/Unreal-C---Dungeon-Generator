@@ -17,6 +17,8 @@ class MYPROJECT3_API UPDGGameInstance : public UGameInstance
 public:
 	UPDGGameInstance();
 
+	UPROPERTY(BlueprintReadOnly)
 	int32 LevelsCleared = 0;
+
 protected:
 };

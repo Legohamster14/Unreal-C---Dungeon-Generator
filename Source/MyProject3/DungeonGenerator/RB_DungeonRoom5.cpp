@@ -33,6 +33,12 @@ ARB_DungeonRoom5::ARB_DungeonRoom5()
 	SmallPropSpawner14 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner14"));
 	SmallPropSpawner15 = CreateDefaultSubobject<UArrowComponent>(TEXT("SmallPropSpawner15"));
 
+	ChestSpawn1 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn1"));
+	ChestSpawn2 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn2"));
+	ChestSpawn3 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn3"));
+	ChestSpawn4 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn4"));
+	ChestSpawn5 = CreateDefaultSubobject<UArrowComponent>(TEXT("ChestSpawn5"));
+
 	ExitPoint1->SetupAttachment(ExitPointsFolder);
 	ExitPoint2->SetupAttachment(ExitPointsFolder);
 	ExitPoint3->SetupAttachment(ExitPointsFolder);
@@ -59,4 +65,10 @@ ARB_DungeonRoom5::ARB_DungeonRoom5()
 	SmallPropSpawner13->SetupAttachment(SmallPropsFolder);
 	SmallPropSpawner14->SetupAttachment(SmallPropsFolder);
 	SmallPropSpawner15->SetupAttachment(SmallPropsFolder);
+
+	ChestSpawn1->SetupAttachment(ChestSpawnFolder);
+	ChestSpawn2->SetupAttachment(ChestSpawnFolder);
+	ChestSpawn3->SetupAttachment(ChestSpawnFolder);
+	ChestSpawn4->SetupAttachment(ChestSpawnFolder);
+	ChestSpawn5->SetupAttachment(ChestSpawnFolder);
 }

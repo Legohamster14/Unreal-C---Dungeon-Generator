@@ -34,6 +34,8 @@ public:
 	USceneComponent* SmallPropsFolder;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USceneComponent* MiscFolder;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* ChestSpawnFolder;
 
 protected:
 	// Called when the game starts or when spawned

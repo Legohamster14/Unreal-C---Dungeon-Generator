@@ -18,6 +18,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* DefaultSceneRoot;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* Chest;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")

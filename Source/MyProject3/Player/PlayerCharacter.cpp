@@ -7,6 +7,7 @@
 #include "MyProject3/Enemies/EnemyBase.h"
 #include "MyProject3/PDGGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -36,7 +37,8 @@ void APlayerCharacter::BeginPlay()
 	//box collision will trigger function on onoverlap
 	AttackArea->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnAttackAreaOverlap);
 	AttackArea->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1.0f, FColor::Red, FString::Printf(TEXT("%s"), (AttackArea->IsCollisionEnabled() ? TEXT("True"): TEXT("False"))));
+
+	
 }
 
 // Called every frame

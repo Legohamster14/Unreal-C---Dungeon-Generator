@@ -20,6 +20,7 @@ ARoomBase::ARoomBase()
 	MiscFolder = CreateDefaultSubobject<USceneComponent>(TEXT("MiscFolder"));
 	BigPropsFolder = CreateDefaultSubobject<USceneComponent>(TEXT("BigPropsFolder"));
 	SmallPropsFolder = CreateDefaultSubobject<USceneComponent>(TEXT("SmallPropsFolder"));
+	ChestSpawnFolder = CreateDefaultSubobject<USceneComponent>(TEXT("ChestSpawnFolder"));
 
 	Cube_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube_1"));
 	Cube_2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cube_2"));
@@ -47,6 +48,7 @@ ARoomBase::ARoomBase()
 	MiscFolder->SetupAttachment(DefaultSceneRoot);
 	SmallPropsFolder->SetupAttachment(PropSpawnerFolder);
 	BigPropsFolder->SetupAttachment(PropSpawnerFolder);
+	ChestSpawnFolder->SetupAttachment(DefaultSceneRoot);
 
 	Cube_1->SetupAttachment(GeometryFolder);
 	Cube_2->SetupAttachment(GeometryFolder);

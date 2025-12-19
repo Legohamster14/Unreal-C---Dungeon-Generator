@@ -12,6 +12,8 @@
 #include "NavigationPath.h"
 #include "MyProject3/DungeonGenerator/Chest.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "MyProject3/PDGGameInstance.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 ADungeonGenerator::ADungeonGenerator()
@@ -25,6 +27,12 @@ ADungeonGenerator::ADungeonGenerator()
 void ADungeonGenerator::BeginPlay()
 {
 	Super::BeginPlay();
+
+	MyGameInstance = Cast<UPDGGameInstance>(GetGameInstance());
+	int32 LevelsCompleted = MyGameInstance->LevelsCleared;
+
+	RoomAmount = RoomAmount + LevelsCompleted * RoomsToAdd;
+	EnemyAmount = EnemyAmount + LevelsCompleted * EnemiesToAdd;
 	
 	//spawns the first room and starts the loop to generate the rest
 	SpawnStarterRoom();
@@ -32,10 +40,6 @@ void ADungeonGenerator::BeginPlay()
 
 	//gets the nav mesh
 	NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(this);
-
-	FTimerHandle EndGoalSpawnerHandle;
-
-	GetWorldTimerManager().SetTimer(EndGoalSpawnerHandle, this, &ADungeonGenerator::SpawnEndGoal, 2.0f, false);
 }
 
 // Called every frame
@@ -90,6 +94,10 @@ void ADungeonGenerator::SpawnNextRoom()
 		LatestSpawnedRoom->SmallPropsFolder->GetChildrenComponents(false, LatestSmallSpawnPoints);
 		SmallPropSpawnPoints.Append(LatestSmallSpawnPoints);
 
+		TArray<USceneComponent*> LatestChestSpawnPoint;
+		LatestSpawnedRoom->ChestSpawnFolder->GetChildrenComponents(false, LatestChestSpawnPoint);
+		ChestSpawnPoints.Append(LatestChestSpawnPoint);
+
 		SpawnedRooms.Add(LatestSpawnedRoom);
 	}
 
@@ -101,6 +109,7 @@ void ADungeonGenerator::SpawnNextRoom()
 	else {
 		CloseUnusedExits();
 		SpawnProps();
+		SpawnEndGoal();
 	}
 }
 
@@ -168,6 +177,15 @@ void ADungeonGenerator::SpawnProps()
 	GetWorldTimerManager().SetTimer(SpawnEnemiesHandle, this, &ADungeonGenerator::SpawnEnemies, 2.0f, false);
 }
 
+void ADungeonGenerator::SpawnEndGoal()
+{
+	USceneComponent* RandomChestSpawn = ChestSpawnPoints[rand() % ChestSpawnPoints.Num()];
+
+	AChest* SpawnedChest = GetWorld()->SpawnActor<AChest>(ChestReference);
+	SpawnedChest->SetActorLocation(RandomChestSpawn->GetComponentLocation());
+	SpawnedChest->SetActorRotation(RandomChestSpawn->GetComponentRotation());
+}
+
 void ADungeonGenerator::SpawnEnemies()
 {
 	//finds a random point on the nav mesh
@@ -200,25 +218,4 @@ void ADungeonGenerator::SpawnEnemies()
 	}
 
 
-}
-
-void ADungeonGenerator::SpawnEndGoal()
-{
-	ARoomBase* RandomRoom = SpawnedRooms[rand() % SpawnedRooms.Num()];
-	FNavLocation RandomNavPoint;
-	FVector OffsetInRoom = FVector(1000, 0, 0);
-	FVector SpawnOffset = FVector(0, 0, 50);
-
-	if (NavSystem->GetRandomPointInNavigableRadius(RandomRoom->GetActorLocation() + OffsetInRoom, 1400, RandomNavPoint))
-	{
-		//FIX THIS CENTER OF ROOM IS NOT IN THE CENTER
-		//SET SPAWN POINT
-		//SAME LOGIC AS PROP SPAWN
-		FVector RandomPoint = RandomNavPoint;
-		EndGoal = this->GetWorld()->SpawnActor<AChest>(ChestReference);
-		EndGoal->SetActorLocation(FVector(RandomPoint.X, RandomPoint.Y, 50));
-		FRotator EndGoalRotation = UKismetMathLibrary::FindLookAtRotation(EndGoal->GetActorLocation(), RandomRoom->GetActorLocation() + OffsetInRoom);
-		EndGoal->SetActorRotation(FRotator(0, EndGoalRotation.Yaw, 0));
-		//DrawDebugLine(GetWorld(), EndGoal->GetActorLocation(), RandomRoom->GetActorLocation() +, FColor::Green, true, 100.0f, 0, 10.0f);
-	}
 }
